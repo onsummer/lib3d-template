@@ -1,0 +1,24 @@
+# 说明
+
+本示例为 `vite` 中 vue3 + ts 模板创建的简易项目，提供了非 CDN 的 ThreeJS 简易模板。
+
+# 依赖安装与项目启动
+
+建议使用 `yarn` 或 `pnpm` 安装并管理依赖。
+
+``` sh
+pnpm install
+
+# or
+yarn
+```
+
+随后即可启动
+
+``` sh
+pnpm dev
+```
+
+# 场景组件
+
+场景组件位于 `src/components/ThreeScene.vue`，组件挂载时用 cube 例子作演示。

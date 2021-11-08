@@ -1,0 +1,1 @@
+export { default as ThreeScene } from './ThreeScene.vue'

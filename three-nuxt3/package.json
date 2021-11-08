@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "start": "node .output/server/index.mjs"
+  },
+  "devDependencies": {
+    "@types/three": "^0.133.1",
+    "nuxt3": "^3.0.0-27268729.5b8e10f"
+  },
+  "dependencies": {
+    "three": "^0.134.0"
+  }
+}
