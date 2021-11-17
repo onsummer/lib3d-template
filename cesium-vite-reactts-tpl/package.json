@@ -7,7 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "cesium": "^1.87.0",
+    "cesium": "^1.87.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },

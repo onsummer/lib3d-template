@@ -6,14 +6,13 @@ import {
 import '../../node_modules/cesium/Source/Widgets/widgets.css'
 import './index.css'
 
-declare interface Window {
-  CESIUM_BASE_URL: string
-}
-
-window['CESIUM_BASE_URL'] = './node_modules/cesium/Build/CesiumUnminified/'
+//#region 为 CESIUM_BASE_URL 补充定义
+import './index.d'
+window.CESIUM_BASE_URL = './node_modules/cesium/Build/CesiumUnminified/'
+//#endregion
 
 let viewer: Viewer;
-function App() {
+function CesiumScene() {
   const cesiumContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -30,4 +29,4 @@ function App() {
   )
 }
 
-export default App
+export default CesiumScene
