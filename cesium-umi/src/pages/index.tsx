@@ -1,9 +1,11 @@
-import styles from './index.less';
+import React from 'react'
+import CesiumScene from '@/components/CesiumScene'
+import './index.less'
 
 export default function IndexPage() {
   return (
     <div>
-      <h1 className={styles.title}>Page index</h1>
+      <CesiumScene />
     </div>
   );
 }

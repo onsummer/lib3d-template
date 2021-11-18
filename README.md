@@ -215,9 +215,46 @@ yarn create vite
 创建项目：
 
 ``` sh
+mkdir cesium-umi
+cd ./cesium-umi/
+
+pnpm init @umijs/umi-app
+# or use pnpx
+pnpx @umijs/create-umi-app
 ```
 
+如果你使用 yarn 或者 npx/npm，你可以这么做：
 
+``` sh
+# or use yarn
+yarn create @umijs/umi-app
+# or use npx
+npx @umijs/create-umi-app
+# or use npm@6.x
+npm init @umijs/umi-app
+```
+
+会提示是否安装初始化项目用的包：
+
+``` sh
+Need to install the following packages:
+  @umijs/create-umi-app
+Ok to proceed? (y)
+```
+
+回车确认即可。
+
+umi.js 3.x 的项目需要在工程文件夹内操作，cli 不会帮你创建新的文件夹。
+
+### 踩坑点
+
+Webpack 4 会在开发或打包时报 Cesium 的第三方依赖：Zip.js 打包错误，这个只需在 `.umirc.ts` 中开启 `webpack5` 即可。
+
+开发时要配置 `.umirc.ts` 中的 `copy` 项，将 Cesium 的静态文件预先复制到 `public` 目录下，且要将
+
+以上两个问题，可以一步到位，直接配置 CDN 免去 Cesium 的打包即可。
+
+此示例项目使用了 CDN。
 
 
 
