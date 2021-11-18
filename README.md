@@ -183,7 +183,22 @@ npm init nuxt-app three-nuxt2
 
 
 
-# 3. React + CesiumJS
+# 4. React + CesiumJS
+
+
+
+进度表
+
+| 项目              | 可显示 | 说明文档 | CDN化 |
+| ----------------- | ------ | -------- | ----- |
+| vite2.x react17ts | ✅      | 50%      | NO    |
+| next.js 12        | ✅      | 90%      | NO    |
+| umi 3.5           | ✅      | 90%      | ✅     |
+| cra 2.x webpack4  | ✅      | 70%      | NO    |
+
+
+
+
 
 ## ① vite with react ts template
 
@@ -192,21 +207,64 @@ npm init nuxt-app three-nuxt2
 ``` sh
 # prefer
 pnpm init vite
+pnpx create-vite
 
 # or u can use
 npm init vite
+npx create-vite
 yarn create vite
 ```
 
 选择其中 react-ts 模板即可。
+
+
 
 ## ② next.js
 
 创建项目：
 
 ``` sh
+pnpm init next-app --ts
 
+# or
+pnpx create-next-app --ts
 ```
+
+也可以用其他的包管理器
+
+``` sh
+npm init next-app --ts
+npx create-next-app --ts
+
+# yarn
+yarn create next-app --ts
+```
+
+若使用 `yarn create`、`pnpx`、`pnpm init` 创建项目，则使用 yarn 下载依赖；若使用 `npx`、`npm init`，则使用 npm 下载依赖。
+
+请注意，使用 `npm init` 或 `pnpm init` 创建项目的话，`--ts` 及 `--typescript` 参数是无效的。所以应该用 `yarn create`、`npx`、`pnpx` 来创建项目。
+
+为了保持统一，我使用 pnpm 重新下载了一遍依赖。
+
+next.js 中对 Cesium 的组件不能使用服务端渲染，有可能是我不会。
+
+当前配置为让 webpack 打包，暂未引入 Cesium CDN，待后续增补。
+
+### 踩坑点
+
+- Cesium 场景组件使用动态导入，并禁用 ssr
+
+``` ts
+const CesiumScene = dynamic(() => import('../components/CesiumScene'), {
+  ssr: false,
+})
+```
+
+- 配置 next.config.js 使用 NodeJS 的 cmd 模块化，不能使用 ts，若使用 es 模块化，则改后缀 `.mjs`；对于 webpack 打包 cesium 的方式，要配置 `CopyWebpackPlugin`，把 `Widgets`、`Assets`、`ThirdParty`、`Workers` 四大目录复制到 public 目录下；尤其注意一点，`to` 的相对路径是 `./.next`，而不是 `./`（项目根目录）。
+
+### 参考
+
+https://github.com/willwill96/cesium-nextjs-example
 
 
 
@@ -263,6 +321,39 @@ Webpack 4 会在开发或打包时报 Cesium 的第三方依赖：Zip.js 打包�
 创建项目：
 
 ``` sh
-pnpx create-react-app
+pnpx create-react-app cesium-cra --template typescript
+
+# use pnpm init
+pnpm init react-app cesium-cra --template typescript
 ```
 
+你也可以用其他包管理器的初始化功能：
+
+``` sh
+# use npm/npx
+npm init react-app cesium-cra --template typescript
+npx create-react-app cesium-cra --template typescript
+
+# use yarn
+yarn create react-app cesium-cra --template typescript
+```
+
+无论是上面哪一个命令创建的项目，都会使用 yarn 来安装依赖，除非显示指定参数 `--use-npm`，才会用 npm 安装。很遗憾，cra 目前还不支持 pnpm。
+
+我为了统一，将 lock 文件忽略并重新使用 pnpm 安装依赖，你可以选择你喜欢的包管理器。
+
+create-react-app 就没 umi.js 那么多接地气的配置了，我按 CDN 的方式配置。
+
+### webpack4 引发的 Cesium Zip.js 依赖错误问题
+
+Zip.js 用到了 WebWorker，而 cra 截至发稿前，react-scripts 似乎还在用 webpack4，只要切换成 webpack5 就没有这个问题了，因为 webpack5 内置了 WebWorker 的支持。
+
+关于这个问题，官方龟速推进了一年还在摸鱼：https://github.com/facebook/create-react-app/issues/9994
+
+可以自己替换掉 `package.json` 中 `scripts` 的 react-scripts，只需在 npmjs 官方网站上找找合适的包即可（至少在官方正式更新前只能这么干了）。
+
+社区上有一个更好的解决方法：
+
+https://github.com/gildas-lormeau/zip.js/discussions/258#discussioncomment-1360408
+
+但是使用 `@craco/craco` 去修改 webpack 的配置的话，仍然是在操作 webpack4，要确保 `copy-webpack-plugin` 的版本是 6.x 才可以。
