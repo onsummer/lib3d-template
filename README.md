@@ -175,13 +175,199 @@ yarn create nuxt-app three-nuxt2
 
 # 2. Vue + CesiumJS
 
+
+
+进度表
+
+| 项目          | 可显示 | 说明文档 | CDN化 |
+| ------------- | ------ | -------- | ----- |
+| create-vue    | ✅      | 50%      | NO    |
+| vite2.x vue3  | ✅      | 50%      | NO    |
+| @vue/cli vue3 | ✅      | 80%      | NO    |
+| nuxt2         |        |          | NO    |
+| nuxt3         |        |          | NO    |
+
+
+
 ## ① create-vue
+
+项目命名为：`cesium-createvue`
+
+使用如下任意一条命令创建项目：
+
+``` sh
+pnpm init vue@next
+pnpx create-vue@next
+
+# or use your prefer package manager
+npm init vue@next
+npx create-vue@next
+yarn create vue@next
+```
+
+### 功能的选用
+
+| 名称       | 状态           |
+| ---------- | -------------- |
+| vue-router | 已安装，未使用 |
+| vuex       | 已安装，未使用 |
+
+
 
 ## ② vite with vue ts template
 
+项目命名为：`cesium-vite-vuets-tpl`
+
+使用如下任意一条命令创建项目：
+
+``` sh
+# I prefer
+pnpm init vite
+# or
+pnpx create-vite
+
+# or u can use
+npm init vite
+npx create-vite
+yarn create vite
+```
+
+之后安装依赖我选用 pnpm，此处选择 vue-ts 模板。
+
+这个其实就是 ① 去掉了 vuex、vue-router 的简易版本。
+
+
+
 ## ③ @vue/cli with vue3
 
+cli 版本是最新版的 4.x，创建项目时，版本是 4.5.15.
+
+``` sh
+# 确保你已经全局安装了 @vue/cli
+vue --version
+```
+
+目前，推荐遵循官方文档的安装步骤，来安装 @vue/cli.
+
+创建项目：
+
+``` sh
+vue create cesium-vuecli4
+```
+
+选择的配置有：
+
+| 名称              | 说明                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| vue 版本          | 3.x                                                          |
+| ESLint + Prettier | 启用，只在 commit 时启动 Lint，用不到可以不加这个，配置文件在独立文件中 |
+| 包管理器          | pnpm，你可以用 yarn、npm                                     |
+| CSS 预处理器      | 启用，使用 Less，你也可以用 Sass/SCSS                        |
+| Babel             | 启用                                                         |
+| 组件命名风格      | 大驼峰                                                       |
+
+### 踩坑点
+
+若让 webpack 介入打包过程，根据报错来看，与 create-react-app 中遇到的问题是一样的，也需要对 webpack 进行配置。
+
+但处理完相同的问题后，我尝试使用 build 进行打包，报 “Syntax Error: Thread Loader”问题，查资料后发现社区有人遇到过，是线程加载器的问题，仍需修改 webpack。
+
+最后，一份能跑在 webpack4.x for @vue/cli4 的配置如下：
+
+``` js
+// vue.config.js
+
+/**
+ * @type {import('@vue/cli-service').ProjectOptions}
+ */
+module.exports = {
+  /* ... */
+  chainWebpack: (config) => {
+    config.module.rules.forEach(v => {
+      if (v.use) {
+        const idx = v.use.findIndex(w => w.loader.includes('thread-loader'))
+        if (idx !== -1) v.use.splice(idx, 1)
+      }
+    });
+    config.amd = { ...config.amd, toUrlUndefined: true };
+    config.plugins.push(
+      new DefinePlugin({
+        CESIUM_BASE_URL: JSON.stringify('./Cesium/'),
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.join(
+              __dirname,
+              'node_modules/cesium/Build/Cesium/Workers'
+            ),
+            to: './Cesium/Workers',
+          },
+          {
+            from: path.join(
+              __dirname,
+              'node_modules/cesium/Build/Cesium/ThirdParty'
+            ),
+            to: './Cesium/ThirdParty',
+          },
+          {
+            from: path.join(
+              __dirname,
+              'node_modules/cesium/Build/Cesium/Assets'
+            ),
+            to: './Cesium/Assets',
+          },
+          {
+            from: path.join(
+              __dirname,
+              'node_modules/cesium/Build/Cesium/Widgets'
+            ),
+            to: './Cesium/Widgets',
+          },
+        ],
+      })
+    );
+    //#region 解决 Webpack4 打包 CesiumWorker 的问题
+    config.module.rules.push({
+      test: /\.js$/,
+      use: { loader: require.resolve('@open-wc/webpack-import-meta-loader') }
+    });
+    //#endregion
+    //#region 解决 Webpack 打包 Cesium 在控制台报警告的问题
+    config.module.unknownContextRegExp = /^('|')\.\/.*?\1$/;
+    config.module.unknownContextCritical = false
+    //#endregion
+  }
+};
+```
+
+**切记，chainWebpack 若为函数，不要返回 config。**
+
+有时候用 HTTP 服务器看打包后的成果，发现仍不能运行，检查 `CESIUM_BASE_URL` 即可发现 Cesium 的基本路径没配好，这一点需要根据环境变量来配置了。
+
+
+
 ## ④ nuxt3
+
+nuxi 版本：0.10.1
+
+nuxt 版本：3.0.0-27268729.5b8e10f
+
+``` sh
+npx nuxi init three-nuxt3
+pnpx nuxi init three-nuxt3
+```
+
+nuxt3 目前使用 pnpm@6.20 下载依赖无法正常运行，改用 yarn 或 npm 是可以的
+
+``` sh
+yarn
+
+# or
+npm install
+```
+
+
 
 ## ⑤ nuxt2
 
