@@ -367,6 +367,10 @@ module.exports = {
 
 有时候用 HTTP 服务器看打包后的成果，发现仍不能运行，检查 `CESIUM_BASE_URL` 即可发现 Cesium 的基本路径没配好，这一点需要根据环境变量来配置了。
 
+### 参考
+
+https://github.com/vuejs/vue-cli/issues/2171
+
 
 
 ## ④ nuxt3
