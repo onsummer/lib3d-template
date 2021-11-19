@@ -33,6 +33,18 @@ TODO：后续会使用 CDN 进行打包加速。
 
 # 1. Vue + ThreeJS
 
+进度表
+
+| 项目          | 可显示 | 说明文档 | CDN化 |
+| ------------- | ------ | -------- | ----- |
+| create-vue    | ✅      | 50%      | NO    |
+| vite2.x vue3  | ✅      | 50%      | NO    |
+| @vue/cli vue3 | ✅      | 80%      | NO    |
+| nuxt2         | ✅      | 80%      | NO    |
+| nuxt3         | ✅      | 80%      | NO    |
+
+
+
 在初始化项目完成后，统一安装命令：
 
 ``` sh
@@ -162,14 +174,24 @@ yarn create nuxt-app three-nuxt2
 
 选择的配置有：
 
-| 配置名       | 说明                                     |
-| ------------ | ---------------------------------------- |
-| UI 框架      | 无，你可以选你自己喜欢的或者后期自己添加 |
-| 包管理器     | yarn                                     |
-| 测试框架     | 无                                       |
-| 版本控制     | git                                      |
-| 代码规范工具 | ESLint、Prettier 等，按需选择            |
-| 渲染模式     | 单页应用（SPA）                          |
+```
+create-nuxt-app v3.7.1
+✨  Generating Nuxt.js project in three-nuxt2
+? Project name: cesium-nuxt2
+? Programming language: TypeScript
+? Package manager: Yarn
+? UI framework: None
+? Nuxt.js modules: (Press <space> to select, <a> to toggle all, <i> to invert selection)
+? Linting tools: ESLint, Prettier, StyleLint
+? Testing framework: None
+? Rendering mode: Single Page App
+? Deployment target: Server (Node.js hosting)
+? Development tools: (Press <space> to select, <a> to toggle all, <i> to invert selection)
+? Continuous integration: None
+? Version control system: Git
+```
+
+有需要的后期可以试试 SSR 模式
 
 
 
@@ -184,8 +206,8 @@ yarn create nuxt-app three-nuxt2
 | create-vue    | ✅      | 50%      | NO    |
 | vite2.x vue3  | ✅      | 50%      | NO    |
 | @vue/cli vue3 | ✅      | 80%      | NO    |
-| nuxt2         |        |          | NO    |
-| nuxt3         |        |          | NO    |
+| nuxt2         | ✅      | 80%      | NO    |
+| nuxt3         | ✅      | 80%      | NO    |
 
 
 
@@ -351,14 +373,14 @@ module.exports = {
 
 nuxi 版本：0.10.1
 
-nuxt 版本：3.0.0-27268729.5b8e10f
+nuxt 版本：v3.0.0-27287661.1e0e881
 
 ``` sh
 npx nuxi init three-nuxt3
 pnpx nuxi init three-nuxt3
 ```
 
-nuxt3 目前使用 pnpm@6.20 下载依赖无法正常运行，改用 yarn 或 npm 是可以的
+nuxt3 目前（文档最后更新时：2021年11月19日）使用 pnpm@6.20 下载依赖无法正常运行，改用 yarn 或 npm 是可以的
 
 ``` sh
 yarn
@@ -367,9 +389,60 @@ yarn
 npm install
 ```
 
+### 踩坑点
+
+让 vite 打包 cesium，仍然是静态文件的问题，开发时可以勉强用 node_modules 下的包来凑数，否则打包后四大金刚文件夹仍然是找不到的。
+
+能尽量别让打包器打包 cesium 就不要走这条路。
+
 
 
 ## ⑤ nuxt2
+
+create-nuxt-app 版本：
+
+nuxt版本：
+
+使用如下任意一条命令创建项目（选用你喜欢的包管理器）：
+
+``` sh
+pnpm init nuxt-app cesium-nuxt2
+pnpx create-nuxt-app cesium-nuxt2
+
+# or
+npm init nuxt-app cesium-nuxt2
+npx create-nuxt-app cesium-nuxt2
+yarn create nuxt-app cesium-nuxt2
+```
+
+但是安装依赖只能随着脚手架的提示文字来了，目前只有 yarn 或者 npm。
+
+选择的配置有：
+
+```
+create-nuxt-app v3.7.1
+✨  Generating Nuxt.js project in cesium-nuxt2
+? Project name: cesium-nuxt2
+? Programming language: TypeScript
+? Package manager: Yarn
+? UI framework: None
+? Nuxt.js modules: (Press <space> to select, <a> to toggle all, <i> to invert selection)
+? Linting tools: ESLint, Prettier, StyleLint
+? Testing framework: None
+? Rendering mode: Single Page App
+? Deployment target: Server (Node.js hosting)
+? Development tools: (Press <space> to select, <a> to toggle all, <i> to invert selection)
+? Continuous integration: None
+? Version control system: Git
+```
+
+有需要的后期可以试试 SSR 模式。
+
+### 踩坑点
+
+仍旧是 webpack4 的配置，在 `nuxt.config.js` 中，要对 build 进行扩展。
+
+而且，与其他的工程不太一样的是，静态资源使用 `copy-webpack-plugin` 复制到的地方是 `./dist/_nuxt/` 目录，而不是 `./dist/` 目录，所以对 `CESIUM_BASE_URL` 的配置（即 `definePlugin`）需要小心。
 
 
 
