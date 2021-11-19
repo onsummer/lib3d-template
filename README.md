@@ -45,31 +45,44 @@ pnpm add three && pnpm add @types/three -D
 
 ## ① create-vue
 
-创建项目：
+使用如下任意一条命令创建项目：
 
 ``` sh
 pnpm init vue@next
-# or
+pnpx create-vue@next
+
+# or use your prefer package manager
 npm init vue@next
+npx create-vue@next
+yarn create vue@next
 ```
 
-### 功能
+### 功能的选用
 
 | 名称       | 状态           |
 | ---------- | -------------- |
 | vue-router | 已安装，未使用 |
 | vuex       | 已安装，未使用 |
 
+
+
 ## ② vite with vue ts template
 
+使用如下任意一条命令创建项目：
+
 ``` sh
-# prefer
+# I prefer
 pnpm init vite
+# or
+pnpx create-vite
 
 # or u can use
 npm init vite
+npx create-vite
 yarn create vite
 ```
+
+之后安装依赖我选用 pnpm，此处选择 vue-ts 模板。
 
 这个其实就是 ① 去掉了 vuex、vue-router 的简易版本。
 
@@ -81,10 +94,10 @@ cli 版本是最新版的 4.x，创建项目时，版本是 4.5.15.
 
 ``` sh
 # 确保你已经全局安装了 @vue/cli
-vue --version # 
+vue --version
 ```
 
-目前，推荐使用官方文档进行安装 @vue/cli.
+目前，推荐遵循官方文档的安装步骤，来安装 @vue/cli.
 
 创建项目：
 
@@ -113,6 +126,7 @@ nuxt 版本：3.0.0-27268729.5b8e10f
 
 ``` sh
 npx nuxi init three-nuxt3
+pnpx nuxi init three-nuxt3
 ```
 
 nuxt3 目前使用 pnpm@6.20 下载依赖无法正常运行，改用 yarn 或 npm 是可以的
@@ -132,14 +146,16 @@ create-nuxt-app 版本：
 
 nuxt版本：
 
-你可以用官方推荐的 yarn 来开项目，也可以用 pnpm
+使用如下任意一条命令创建项目（选用你喜欢的包管理器）：
 
 ``` sh
-yarn create nuxt-app three-nuxt2
+pnpm init nuxt-app three-nuxt2
+pnpx create-nuxt-app three-nuxt2
 
 # or
-pnpm init nuxt-app three-nuxt2
 npm init nuxt-app three-nuxt2
+npx create-nuxt-app three-nuxt2
+yarn create nuxt-app three-nuxt2
 ```
 
 但是安装依赖只能随着脚手架的提示文字来了，目前只有 yarn 或者 npm。
@@ -173,18 +189,6 @@ npm init nuxt-app three-nuxt2
 
 # 3. React + ThreeJS
 
-## ① vite with react ts template
-
-## ② next.js
-
-## ③ umi.js
-
-## ④ create-react-app
-
-
-
-# 4. React + CesiumJS
-
 
 
 进度表
@@ -195,8 +199,6 @@ npm init nuxt-app three-nuxt2
 | next.js 12        | ✅      | 90%      | NO    |
 | umi 3.5           | ✅      | 90%      | ✅     |
 | cra 2.x webpack4  | ✅      | 70%      | NO    |
-
-
 
 
 
@@ -221,28 +223,144 @@ yarn create vite
 
 ## ② next.js
 
+请注意，使用 `npm init` 或 `pnpm init` 创建项目，经测试，`--ts` 及 `--typescript` 参数是无效的。
+
+所以推荐用 `yarn create`、`npx`、`pnpx` 来创建项目。
+
 创建项目：
 
 ``` sh
-pnpm init next-app --ts
-
-# or
 pnpx create-next-app --ts
 ```
 
 也可以用其他的包管理器
 
 ``` sh
-npm init next-app --ts
 npx create-next-app --ts
 
 # yarn
 yarn create next-app --ts
 ```
 
-若使用 `yarn create`、`pnpx`、`pnpm init` 创建项目，则使用 yarn 下载依赖；若使用 `npx`、`npm init`，则使用 npm 下载依赖。
+若使用 `yarn create`、`pnpx`、`pnpm init` 创建项目，会在创建完项目后，自动调用 yarn 下载依赖；若使用 `npx`、`npm init`，会在创建完项目后，自动调用 npm 下载依赖。
 
-请注意，使用 `npm init` 或 `pnpm init` 创建项目的话，`--ts` 及 `--typescript` 参数是无效的。所以应该用 `yarn create`、`npx`、`pnpx` 来创建项目。
+为了保持统一，我使用 pnpm 重新下载了一遍依赖。
+
+
+
+## ③ umi.js
+
+umi.js 开项目要先建文件夹，然后在文件夹下初始化。
+
+```  sh
+mkdir three-umi
+cd ./three-umi/
+
+# 使用你喜欢的包管理器初始化项目
+
+# -- pnpm --
+pnpm init @umijs/umi-app
+# or use pnpx
+pnpx @umijs/create-umi-app
+
+# -- yarn --
+yarn create @umijs/umi-app
+
+# -- npm or npx --
+npx @umijs/create-umi-app
+# or use npm@6.x
+npm init @umijs/umi-app
+```
+
+随后就是安装依赖、安装 three 和 three 的类型提示库即可。
+
+
+
+## ④ create-react-app
+
+创建项目：
+
+``` sh
+pnpx create-react-app three-cra --template typescript
+
+# use pnpm init
+pnpm init react-app three-cra --template typescript
+```
+
+你也可以用其他包管理器的初始化功能：
+
+``` sh
+# use npm/npx
+npm init react-app three-cra --template typescript
+npx create-react-app three-cra --template typescript
+
+# use yarn
+yarn create react-app three-cra --template typescript
+```
+
+无论是上面哪一个命令创建的项目，都会使用 yarn 来安装依赖，除非显示指定参数 `--use-npm`，才会用 npm 安装。很遗憾，cra 目前还不支持 pnpm。
+
+我为了统一，将 lock 文件忽略并重新使用 pnpm 安装依赖，你可以选择你喜欢的包管理器。
+
+
+
+# 4. React + CesiumJS
+
+
+
+进度表
+
+| 项目              | 可显示 | 说明文档 | CDN化 |
+| ----------------- | ------ | -------- | ----- |
+| vite2.x react17ts | ✅      | 50%      | NO    |
+| next.js 12        | ✅      | 90%      | NO    |
+| umi 3.5           | ✅      | 90%      | ✅     |
+| cra 2.x webpack4  | ✅      | 70%      | NO    |
+
+
+
+## ① vite with react ts template
+
+创建项目：
+
+``` sh
+# prefer
+pnpm init vite
+pnpx create-vite
+
+# or u can use
+npm init vite
+npx create-vite
+yarn create vite
+```
+
+选择其中 react-ts 模板即可。
+
+
+
+## ② next.js
+
+请注意，使用 `npm init` 或 `pnpm init` 创建项目，经测试，`--ts` 及 `--typescript` 参数是无效的。
+
+所以推荐用 `yarn create`、`npx`、`pnpx` 来创建项目。
+
+创建项目：
+
+``` sh
+pnpx create-next-app --ts
+```
+
+也可以用其他的包管理器
+
+``` sh
+# npx
+npx create-next-app --ts
+
+# yarn
+yarn create next-app --ts
+```
+
+若使用 `yarn create`、`pnpx`、`pnpm init` 创建项目，会在创建完项目后，自动调用 yarn 下载依赖；若使用 `npx`、`npm init`，会在创建完项目后，自动调用 npm 下载依赖。
 
 为了保持统一，我使用 pnpm 重新下载了一遍依赖。
 
